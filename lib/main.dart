@@ -1,22 +1,20 @@
-// ignore_for_file: camel_case_types, prefer_const_constructors_in_immutables
-
 import 'package:flutter/material.dart';
+import 'package:spotify_main_project/presentation/splash/pages/splash.dart';
+import 'core/configs/theme/app_theme.dart';
 
-void main(){
-  runApp(myapp());
+void main() {
+  runApp(MyApp());
 }
 
-class myapp extends StatelessWidget {
-myapp({super.key});
+class MyApp extends StatelessWidget {
+  MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true
-      ),
-      home: Container(),
+      theme: AppTheme.lightTheme,
+      debugShowCheckedModeBanner: false, // Correct reference to the theme
+      home:  const SplashPage(),
     );
   }
 }
