@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
+import 'package:spotify_main_project/presentation/splash/intro/pages/get_startedpage.dart';
+
 class SplashPage extends StatelessWidget {
   const SplashPage({super.key});
 
@@ -15,7 +17,7 @@ class SplashPage extends StatelessWidget {
             end: Alignment.bottomRight,
             colors: [
               Color(0xFF1A1A2E),
-              Color(0xFF4422AA), // Made middle color more vibrant
+              Color(0xFF4422AA), // Vibrant middle color
               Color(0xFF16213E),
             ],
           ),
@@ -24,75 +26,77 @@ class SplashPage extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // Main animation container with more dramatic effects
-              TweenAnimationBuilder<double>(
-                tween: Tween<double>(begin: 0.0, end: 1.0),
-                duration: const Duration(seconds: 2),
-                curve: Curves.easeInOut, // Changed curve for smoother animation
-                builder: (context, value, child) {
-                  return Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      // Adding a visible glow background
-                      Container(
-                        width: 280 * value,
-                        height: 280 * value,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Color(0xFF7700FF).withOpacity(0.3 * value),
-                              blurRadius: 30,
-                              spreadRadius: 10,
-                            ),
-                          ],
-                        ),
-                      ),
+             TweenAnimationBuilder<double>(
+  tween: Tween<double>(begin: 0.0, end: 1.0),
+  duration: const Duration(seconds: 4),
+  curve: Curves.easeInOut,
+  onEnd: () {
+    // Navigate to GetStarted page when animation completes
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(builder: (context) => const GetStartedPage()),
+    );
+  },
+  builder: (context, value, child) {
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        // Glow background effect
+        Container(
+          width: 280 * value,
+          height: 280 * value,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            boxShadow: [
+              BoxShadow(
+                color: Color(0xFF7700FF).withOpacity(0.3 * value),
+                blurRadius: 30,
+                spreadRadius: 10,
+              ),
+            ],
+          ),
+        ),
                       
-                      // Outer Sound Wave with more dramatic rotation
+                      // Outer sound wave with rotation
                       Transform.rotate(
-                        angle: value * math.pi / 4, // More rotation
+                        angle: value * math.pi / 4,
                         child: AnimatedSoundWave(
                           size: 240 * (0.8 + 0.2 * math.sin(value * math.pi * 2)),
                           opacity: 0.4 * value,
-                          // More vibrant colors
                           colors: const [Color(0xFFBB66FF), Color(0xFF8800FF)],
                         ),
                       ),
                       
-                      // Middle Sound Wave with opposite rotation
+                      // Middle sound wave with opposite rotation
                       Transform.rotate(
-                        angle: -value * math.pi / 5, // More rotation
+                        angle: -value * math.pi / 5,
                         child: AnimatedSoundWave(
                           size: 200 * (0.8 + 0.2 * math.sin(value * math.pi * 3)),
                           opacity: 0.5 * value,
-                          // More vibrant colors
                           colors: const [Color(0xFFAA44FF), Color(0xFF6600DD)],
                         ),
                       ),
                       
-                      // Inner Sound Wave with slight rotation
+                      // Inner sound wave
                       Transform.rotate(
                         angle: value * math.pi / 6,
                         child: AnimatedSoundWave(
                           size: 160 * (0.8 + 0.2 * math.sin(value * math.pi * 4)),
                           opacity: 0.6 * value,
-                          // More vibrant colors
                           colors: const [Color(0xFF9933FF), Color(0xFF5500BB)],
                         ),
                       ),
                       
-                      // Additional small particle effects with more contrast
-                      ...List.generate(12, (index) { // Increased from 8 to 12 particles
-                        final angle = index * math.pi / 6; // More evenly distributed
+                      // Floating particles effect
+                      ...List.generate(12, (index) {
+                        final angle = index * math.pi / 6;
                         final distance = 120 * (0.5 + 0.5 * math.sin(value * math.pi * 2 + index));
                         return Positioned(
                           left: 120 + distance * math.cos(angle + value * math.pi),
                           top: 120 + distance * math.sin(angle + value * math.pi),
                           child: Opacity(
-                            opacity: value * 0.9, // Increased visibility
+                            opacity: value * 0.9,
                             child: Container(
-                              width: 8 + (index % 3) * 2, // Varying particle sizes
+                              width: 8 + (index % 3) * 2,
                               height: 8 + (index % 3) * 2,
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
@@ -100,7 +104,7 @@ class SplashPage extends StatelessWidget {
                                   BoxShadow(
                                     color: index % 3 == 0 
                                         ? Colors.purple.withOpacity(0.9) 
-                                        : Colors.blue.withOpacity(0.9), // Multiple colors
+                                        : Colors.blue.withOpacity(0.9),
                                     blurRadius: 12,
                                     spreadRadius: 3,
                                   ),
@@ -112,7 +116,7 @@ class SplashPage extends StatelessWidget {
                         );
                       }),
                       
-                      // Added ripple effect (simple implementation)
+                      // Ripple effect
                       ...List.generate(3, (index) {
                         if (value < 0.3 + index * 0.2) return const SizedBox.shrink();
                         
@@ -134,7 +138,7 @@ class SplashPage extends StatelessWidget {
                         );
                       }),
                       
-                      // Lyra Logo with improved bounce and rotate effect
+                      // Lyra Logo with bounce and rotate effect
                       TweenAnimationBuilder<double>(
                         tween: Tween<double>(begin: 0.0, end: 1.0),
                         duration: const Duration(seconds: 1),
@@ -145,7 +149,7 @@ class SplashPage extends StatelessWidget {
                             child: Transform.scale(
                               scale: scaleValue,
                               child: Transform.rotate(
-                                angle: (1 - scaleValue) * math.pi, // Added rotation
+                                angle: (1 - scaleValue) * math.pi,
                                 child: const EnhancedLyraLogo(size: 120),
                               ),
                             ),
@@ -158,7 +162,7 @@ class SplashPage extends StatelessWidget {
               ),
               const SizedBox(height: 40),
               
-              // Tagline with dramatically improved typing animation
+              // Animated tagline with typing effect
               TweenAnimationBuilder<double>(
                 tween: Tween<double>(begin: 0.0, end: 1.0),
                 duration: const Duration(milliseconds: 2000),
@@ -191,7 +195,7 @@ class SplashPage extends StatelessWidget {
                             ),
                           ),
                           
-                          // Simple blinking cursor
+                          // Blinking cursor effect
                           if (visibleCharacters < tagline.length)
                             TweenAnimationBuilder<double>(
                               tween: Tween<double>(begin: 0.0, end: 1.0),
@@ -237,23 +241,23 @@ class SplashPage extends StatelessWidget {
                 },
               ),
               
-              // Added fade-in version indicator 
+              // Fade-in version indicator
               TweenAnimationBuilder<double>(
                 tween: Tween<double>(begin: 0.0, end: 1.0),
                 duration: const Duration(milliseconds: 1500),
                 curve: Curves.easeIn,
                 builder: (context, value, child) {
                   return Opacity(
-                    opacity: math.max(0, value - 0.7) * 3.3, // Start fading in later
+                    opacity: math.max(0, value - 0.7) * 3.3,
                     child: const Padding(
                       padding: EdgeInsets.only(top: 20),
-                      child: Text(
-                        "v1.0.0",
-                        style: TextStyle(
-                          color: Colors.white70,
-                          fontSize: 12,
-                        ),
-                      ),
+                      // child: Text(
+                      //   "v1.0.0",
+                      //   style: TextStyle(
+                      //     color: Colors.white70,
+                      //     fontSize: 12,
+                      //   ),
+                      // ),
                     ),
                   );
                 },
@@ -289,7 +293,7 @@ class AnimatedSoundWave extends StatelessWidget {
           shape: BoxShape.circle,
           gradient: RadialGradient(
             colors: [
-              colors[0].withOpacity(0.7), // Increased opacity
+              colors[0].withOpacity(0.7),
               colors[1].withOpacity(0),
             ],
           ),
@@ -307,7 +311,7 @@ class EnhancedLyraLogo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TweenAnimationBuilder<double>(
-      tween: Tween<double>(begin: 0.92, end: 1.08), // More pronounced pulsing
+      tween: Tween<double>(begin: 0.92, end: 1.08),
       duration: const Duration(milliseconds: 1500),
       curve: Curves.easeInOut,
       builder: (context, value, child) {
@@ -335,8 +339,8 @@ class EnhancedLyraLogoPainter extends CustomPainter {
     
     // Enhanced outer glow effect
     final Paint glowPaint = Paint()
-      ..color = Colors.purple.withOpacity(0.5) // Increased opacity
-      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 18); // Larger blur
+      ..color = Colors.purple.withOpacity(0.5)
+      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 18);
     
     canvas.drawCircle(Offset(centerX, centerY), radius * 1.15, glowPaint);
     
@@ -355,15 +359,15 @@ class EnhancedLyraLogoPainter extends CustomPainter {
     // Subtle circle accent
     final Paint accentPaint = Paint()
       ..style = PaintingStyle.stroke
-      ..color = Colors.purple.withOpacity(0.3) // Increased opacity
-      ..strokeWidth = 2.5; // Wider stroke
+      ..color = Colors.purple.withOpacity(0.3)
+      ..strokeWidth = 2.5;
     
     canvas.drawCircle(Offset(centerX, centerY), radius * 0.85, accentPaint);
     
     // Music note with gradient
     final Paint notePaint = Paint()
       ..shader = const LinearGradient(
-        colors: [Color(0xFFAA44FF), Color(0xFF6600CC)], // Brighter colors
+        colors: [Color(0xFFAA44FF), Color(0xFF6600CC)],
         begin: Alignment.topCenter,
         end: Alignment.bottomCenter,
       ).createShader(Rect.fromLTWH(
@@ -381,8 +385,8 @@ class EnhancedLyraLogoPainter extends CustomPainter {
     
     // Add shadow to note head
     final Paint shadowPaint = Paint()
-      ..color = Colors.black.withOpacity(0.3) // Increased opacity
-      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 6); // Larger blur
+      ..color = Colors.black.withOpacity(0.3)
+      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 6);
     
     canvas.drawCircle(
       Offset(noteHeadX + 2, noteHeadY + 2),
@@ -395,7 +399,7 @@ class EnhancedLyraLogoPainter extends CustomPainter {
     
     // Add highlight to note head
     final Paint highlightPaint = Paint()
-      ..color = Colors.white.withOpacity(0.7) // Increased opacity
+      ..color = Colors.white.withOpacity(0.7)
       ..style = PaintingStyle.fill;
     
     canvas.drawCircle(
@@ -412,12 +416,12 @@ class EnhancedLyraLogoPainter extends CustomPainter {
     
     // Stem shadow
     final Paint stemShadowPaint = Paint()
-      ..color = Colors.black.withOpacity(0.3) // Increased opacity
+      ..color = Colors.black.withOpacity(0.3)
       ..style = PaintingStyle.stroke
       ..strokeWidth = noteHeadRadius * 0.6;
     
-    canvas.drawLine(
-      Offset(stemStartX + 2, stemStartY + 2), // Larger offset
+   canvas.drawLine(
+      Offset(stemStartX + 2, stemStartY + 2),
       Offset(stemEndX + 2, stemEndY + 2),
       stemShadowPaint,
     );
@@ -425,7 +429,7 @@ class EnhancedLyraLogoPainter extends CustomPainter {
     // Actual stem with gradient
     final Paint stemPaint = Paint()
       ..shader = const LinearGradient(
-        colors: [Color(0xFFAA44FF), Color(0xFF6600CC)], // Brighter colors
+        colors: [Color(0xFFAA44FF), Color(0xFF6600CC)],
         begin: Alignment.topCenter,
         end: Alignment.bottomCenter,
       ).createShader(Rect.fromLTWH(
@@ -451,35 +455,35 @@ class EnhancedLyraLogoPainter extends CustomPainter {
     // More elegant curve for the flag
     flagPath.cubicTo(
       stemEndX + radius * 0.45,  // control point 1 x - more pronounced
-      stemEndY + radius * 0.05, // control point 1 y
+      stemEndY + radius * 0.05,  // control point 1 y
       stemEndX + radius * 0.35,  // control point 2 x - more pronounced
-      stemEndY + radius * 0.25, // control point 2 y
-      stemEndX + radius * 0.15, // end point x - more pronounced
-      stemEndY + radius * 0.35, // end point y
+      stemEndY + radius * 0.25,  // control point 2 y
+      stemEndX + radius * 0.15,  // end point x - more pronounced
+      stemEndY + radius * 0.35,  // end point y
     );
     
     // Add a second curve for more musical style
     flagPath.cubicTo(
-      stemEndX + radius * 0.10, // control point 1 x
-      stemEndY + radius * 0.28, // control point 1 y
-      stemEndX - radius * 0.02, // control point 2 x
-      stemEndY + radius * 0.24, // control point 2 y
-      stemEndX,                 // end point x
-      stemEndY + radius * 0.2,  // end point y
+      stemEndX + radius * 0.10,  // control point 1 x
+      stemEndY + radius * 0.28,  // control point 1 y
+      stemEndX - radius * 0.02,  // control point 2 x
+      stemEndY + radius * 0.24,  // control point 2 y
+      stemEndX,                  // end point x
+      stemEndY + radius * 0.2,   // end point y
     );
     
     // Flag shadow
     final Paint flagShadowPaint = Paint()
-      ..color = Colors.black.withOpacity(0.3) // Increased opacity
+      ..color = Colors.black.withOpacity(0.3)
       ..style = PaintingStyle.fill;
     
-    final Path flagShadowPath = Path()..addPath(flagPath, const Offset(2, 2)); // Larger offset
+    final Path flagShadowPath = Path()..addPath(flagPath, const Offset(2, 2));
     canvas.drawPath(flagShadowPath, flagShadowPaint);
     
     // Actual flag with gradient
     final Paint flagPaint = Paint()
       ..shader = const LinearGradient(
-        colors: [Color(0xFFAA44FF), Color(0xFF6600CC)], // Brighter colors
+        colors: [Color(0xFFAA44FF), Color(0xFF6600CC)],
         begin: Alignment.topCenter,
         end: Alignment.bottomCenter,
       ).createShader(Rect.fromLTWH(
@@ -498,8 +502,8 @@ class EnhancedLyraLogoPainter extends CustomPainter {
       ..color = Colors.white
       ..style = PaintingStyle.fill;
     
-    final double textWidth = 68; // Slightly wider
-    final double textHeight = 24; // Slightly taller
+    final double textWidth = 68;
+    final double textHeight = 24;
     final double textY = centerY - radius * 0.05;
     
     canvas.drawRRect(
@@ -521,7 +525,7 @@ class EnhancedLyraLogoPainter extends CustomPainter {
         style: TextStyle(
           foreground: Paint()
             ..shader = const LinearGradient(
-              colors: [Color(0xFF6600CC), Color(0xFFAA44FF)], // Brighter colors
+              colors: [Color(0xFF6600CC), Color(0xFFAA44FF)],
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
             ).createShader(Rect.fromLTWH(
@@ -530,7 +534,7 @@ class EnhancedLyraLogoPainter extends CustomPainter {
               80,
               20,
             )),
-          fontSize: 22, // Larger font
+          fontSize: 22,
           fontWeight: FontWeight.bold,
           letterSpacing: 2.0,
         ),
@@ -544,7 +548,7 @@ class EnhancedLyraLogoPainter extends CustomPainter {
         text: 'LYRA',
         style: TextStyle(
           color: Colors.black26,
-          fontSize: 22, // Larger font
+          fontSize: 22,
           fontWeight: FontWeight.bold,
           letterSpacing: 2.0,
         ),
@@ -555,7 +559,7 @@ class EnhancedLyraLogoPainter extends CustomPainter {
     shadowTextPainter.layout();
     shadowTextPainter.paint(
       canvas, 
-      Offset(centerX - shadowTextPainter.width / 2 + 2, textY - shadowTextPainter.height / 2 + 2), // Larger offset
+      Offset(centerX - shadowTextPainter.width / 2 + 2, textY - shadowTextPainter.height / 2 + 2),
     );
     
     textPainter.layout();
