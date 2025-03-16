@@ -33,7 +33,7 @@ class SplashPage extends StatelessWidget {
   onEnd: () {
     // Navigate to GetStarted page when animation completes
     Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (context) => const GetStartedPage()),
+      MaterialPageRoute(builder: (context) => const GetStartedpage()),
     );
   },
   builder: (context, value, child) {

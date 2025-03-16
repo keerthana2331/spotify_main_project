@@ -28,6 +28,7 @@ flutter:
   assets:
     - assets/fonts/
     - assets/images/intro_bg.png
+    - assets/images/choose_mode_bg.png
     - assets/vectors/
 
   fonts:
